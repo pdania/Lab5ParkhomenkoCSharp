@@ -180,7 +180,7 @@ namespace Lab3ParkhomenkoCSharp2019.ViewModels.Date
             return false;
         }
 
-        public int GetAge()
+        private int GetAge()
         {
             DateTime birthDate = Convert.ToDateTime(_birthDate);
             DateTime currentDate = DateTime.Now;
