@@ -36,30 +36,21 @@ namespace Lab3ParkhomenkoCSharp2019.ViewModels.Date
         public string Name
         {
             get { return _name; }
-            set { _name = value; }
         }
 
         public string LastName
         {
             get { return _lastName; }
-            set { _lastName = value; }
         }
 
         public DateTime? BirthDate
         {
             get { return _birthDate; }
-            set { _birthDate = (DateTime) value; }
         }
 
         public string Email
         {
             get { return _email; }
-            set
-            {
-                if (!new EmailAddressAttribute().IsValid(value))
-                    throw new EmailException("Incorrect email: ",value);
-                _email = value;
-            }
         }
 
         private enum WesternZodiacSign

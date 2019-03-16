@@ -195,7 +195,7 @@ namespace Lab3ParkhomenkoCSharp2019.ViewModels.Date
                 NameToSet = $"Name: {user.Name}";
                 LastNameToSet = $"Last name: {user.LastName}";
                 EmailToSet = $"Email: {user.Email}";
-                BirthDateToSet = $"Birth date: {user.BirthDate.ToString()}";
+                BirthDateToSet = $"Birth date: {Convert.ToDateTime(user.BirthDate).ToShortDateString()}";
                 ChineseZodiac = $"ChineseSign: {user.ChineseSign()}";
                 WestZodiac = $"SunSign: {user.SunSign()}";
                 IsBirthday = "Is birthday? " + (user.IsBirthday() ? "Yes" : "No");
