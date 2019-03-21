@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
-using Lab3ParkhomenkoCSharp2019.ViewModels.Date;
+using Lab4ParkhomenkoCSharp2019.ViewModels.Date;
 
-namespace Lab3ParkhomenkoCSharp2019.Views.Date
+namespace Lab4ParkhomenkoCSharp2019.Views.Date
 {
     public partial class DateControl : UserControl
     {

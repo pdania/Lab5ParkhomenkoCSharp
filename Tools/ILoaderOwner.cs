@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 
-namespace Lab3ParkhomenkoCSharp2019.Tools
+namespace Lab4ParkhomenkoCSharp2019.Tools
 {
     internal interface ILoaderOwner : INotifyPropertyChanged
     {

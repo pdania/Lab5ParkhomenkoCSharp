@@ -1,8 +1,8 @@
 ﻿using System.Windows;
-using Lab3ParkhomenkoCSharp2019.Tools;
-using Lab3ParkhomenkoCSharp2019.Tools.Managers;
+using Lab4ParkhomenkoCSharp2019.Tools;
+using Lab4ParkhomenkoCSharp2019.Tools.Managers;
 
-namespace Lab3ParkhomenkoCSharp2019.ViewModels
+namespace Lab4ParkhomenkoCSharp2019.ViewModels
 {
     internal class MainWindowViewModel : BaseViewModel, ILoaderOwner
     {

@@ -1,7 +1,7 @@
-﻿<Application x:Class="Lab3ParkhomenkoCSharp2019.App"
+﻿<Application x:Class="Lab4ParkhomenkoCSharp2019.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Lab3ParkhomenkoCSharp2019"
+             xmlns:local="clr-namespace:Lab4ParkhomenkoCSharp2019"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          

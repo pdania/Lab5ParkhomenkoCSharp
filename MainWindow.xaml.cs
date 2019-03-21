@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using Lab3ParkhomenkoCSharp2019.ViewModels;
+using Lab4ParkhomenkoCSharp2019.ViewModels;
 
-namespace Lab3ParkhomenkoCSharp2019
+namespace Lab4ParkhomenkoCSharp2019
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Lab3ParkhomenkoCSharp2019.Tools;
-using Lab3ParkhomenkoCSharp2019.Tools.Managers;
+using Lab4ParkhomenkoCSharp2019.Tools.Managers;
 using System.ComponentModel.DataAnnotations;
+using Lab4ParkhomenkoCSharp2019.Tools;
 
-namespace Lab3ParkhomenkoCSharp2019.ViewModels.Date
+namespace Lab4ParkhomenkoCSharp2019.ViewModels.Date
 {
     class Person : BaseViewModel
     {

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Lab3ParkhomenkoCSharp2019.Properties {
+namespace Lab4ParkhomenkoCSharp2019.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

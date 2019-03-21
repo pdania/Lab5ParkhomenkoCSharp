@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Lab3ParkhomenkoCSharp2019.Properties;
+using Lab4ParkhomenkoCSharp2019.Properties;
 
-namespace Lab3ParkhomenkoCSharp2019.Tools
+namespace Lab4ParkhomenkoCSharp2019.Tools
 {
     internal abstract class BaseViewModel:INotifyPropertyChanged
     {
