@@ -1,9 +1,15 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using Lab4ParkhomenkoCSharp2019.Tools;
 using Lab4ParkhomenkoCSharp2019.Tools.Managers;
+using Lab4ParkhomenkoCSharp2019.Tools.Navigation;
 
 namespace Lab4ParkhomenkoCSharp2019.ViewModels.Date
 {
@@ -12,37 +18,22 @@ namespace Lab4ParkhomenkoCSharp2019.ViewModels.Date
         #region Fields
 
         private DateTime? _birthDate;
-        private string _isAdult;
-        private string _westZodiac;
-        private string _chineseZodiac;
         private string _name;
         private string _lastName;
         private string _email;
-        private string _isBirthday;
-        private string _nameToSet;
-        private string _lastNameToSet;
-        private string _emailToSet;
-        private string _birthDateToSet;
 
+        private ObservableCollection<Person> _users;
+        private Task _backgroundTask;
         #endregion
 
         #region Commands
 
         private RelayCommand<object> _getDateCommand;
+        private RelayCommand<object> _getAddUser;
 
         #endregion
 
         #region Properties
-
-        public string IsAdult
-        {
-            get { return _isAdult; }
-            set
-            {
-                _isAdult = value;
-                OnPropertyChanged();
-            }
-        }
 
         public DateTime? Date
         {
@@ -54,22 +45,12 @@ namespace Lab4ParkhomenkoCSharp2019.ViewModels.Date
             }
         }
 
-        public string WestZodiac
+        public ObservableCollection<Person> Users
         {
-            get { return _westZodiac; }
-            set
+            get => _users;
+            private set
             {
-                _westZodiac = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string ChineseZodiac
-        {
-            get { return _chineseZodiac; }
-            set
-            {
-                _chineseZodiac = value;
+                _users = value;
                 OnPropertyChanged();
             }
         }
@@ -104,63 +85,13 @@ namespace Lab4ParkhomenkoCSharp2019.ViewModels.Date
             }
         }
 
-        public string NameToSet
-        {
-            get { return _nameToSet; }
-            private set
-            {
-                _nameToSet = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string LastNameToSet
-        {
-            get { return _lastNameToSet; }
-            private set
-            {
-                _lastNameToSet = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string EmailToSet
-        {
-            get { return _emailToSet; }
-            private set
-            {
-                _emailToSet = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string BirthDateToSet
-        {
-            get { return _birthDateToSet; }
-            private set
-            {
-                _birthDateToSet = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string IsBirthday
-        {
-            get { return _isBirthday; }
-            private set
-            {
-                _isBirthday = value;
-                OnPropertyChanged();
-            }
-        }
-
         #region Commands
 
-        public RelayCommand<object> GetDate
+        public RelayCommand<object> AddUser
         {
             get
             {
-                return _getDateCommand ?? (_getDateCommand = new RelayCommand<object>(
+                return _getAddUser ?? (_getAddUser = new RelayCommand<object>(
                            DateInplementation, o => CanExecuteCommand()));
             }
         }
@@ -168,6 +99,41 @@ namespace Lab4ParkhomenkoCSharp2019.ViewModels.Date
         #endregion
 
         #endregion
+
+        //public DateViewModel()
+        //{
+        //    _users = new ObservableCollection<Person>(StationManager.DataStorage.UsersList);
+        //    BackgroundTaskProcess();
+        //    StationManager.StopThreads += StopBackgroundTask;
+        //}
+
+        private void BackgroundTaskProcess()
+        {
+            int i = 0;
+            while (i < 50)
+            {
+                var users = _users.ToList();
+                users.Add(new Person("FirstName" + i, "LastName" + i, DateTime.Today, "email@ukr.net" + i));
+                LoaderManager.Instance.ShowLoader();
+                Users = new ObservableCollection<Person>(users);
+                i++;
+            }
+        }
+
+        internal void StopBackgroundTask()
+        {
+            _backgroundTask.Wait(2000);
+            _backgroundTask.Dispose();
+            _backgroundTask = null;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         private bool CanExecuteCommand()
         {
@@ -188,45 +154,7 @@ namespace Lab4ParkhomenkoCSharp2019.ViewModels.Date
         {
             Person user;
             Thread.Sleep(2000);
-            try
-            {
-                user = new Person(_name, _lastName, _birthDate, _email);
-                IsAdult = "IsAdult? " + (user.IsAdult() ? "Yes" : "No");
-                NameToSet = $"Name: {user.Name}";
-                LastNameToSet = $"Last name: {user.LastName}";
-                EmailToSet = $"Email: {user.Email}";
-                BirthDateToSet = $"Birth date: {Convert.ToDateTime(user.BirthDate).ToShortDateString()}";
-                ChineseZodiac = $"ChineseSign: {user.ChineseSign()}";
-                WestZodiac = $"SunSign: {user.SunSign()}";
-                IsBirthday = "Is birthday? " + (user.IsBirthday() ? "Yes" : "No");
-            }
-            catch (EmailException ex)
-            {
-                SetToDefault();
-                MessageBox.Show(ex.Message + ex.Value);
-            }
-            catch (PersonDiedException ex)
-            {
-                SetToDefault();
-                MessageBox.Show(ex.Message + ex.Value);
-            }
-            catch (PersonTooYoungException ex)
-            {
-                SetToDefault();
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        private void SetToDefault()
-        {
-            IsAdult = "";
-            NameToSet = "";
-            LastNameToSet = "";
-            EmailToSet = "";
-            BirthDateToSet = "";
-            ChineseZodiac = "";
-            WestZodiac = "";
-            IsBirthday = "";
+            
         }
     }
 }

@@ -4,15 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lab4ParkhomenkoCSharp2019"
-        xmlns:authentication="clr-namespace:Lab4ParkhomenkoCSharp2019.Views.Date"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
-        xmlns:authentication1="clr-namespace:Lab4ParkhomenkoCSharp2019.Views.Date"
-        xmlns:authentication2="clr-namespace:Lab4ParkhomenkoCSharp2019.Views.Date"
-        xmlns:date="clr-namespace:Lab4ParkhomenkoCSharp2019.Views.Date"
+        xmlns:user="clr-namespace:Lab4ParkhomenkoCSharp2019.Views.User"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="800">
-    <Grid IsEnabled="{Binding IsControlEnabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-        <date:DateControl></date:DateControl>
+        Title="MainWindow" Height="500" Width="800"
+        ResizeMode="NoResize">
+    <Grid>
+        <user:UserListControl />
         <fa:ImageAwesome Icon="Refresh" Width="50" Height="50" Spin="True" Visibility="{Binding LoaderVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"></fa:ImageAwesome>
     </Grid>
 </Window>

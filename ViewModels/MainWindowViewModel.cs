@@ -32,7 +32,7 @@ namespace Lab4ParkhomenkoCSharp2019.ViewModels
         } 
         #endregion
 
-        internal MainWindowViewModel()
+        public MainWindowViewModel()
         {
             LoaderManager.Instance.Initialize(this);
         }

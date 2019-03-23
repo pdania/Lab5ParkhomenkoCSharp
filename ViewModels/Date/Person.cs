@@ -5,16 +5,22 @@ using System.Text;
 using System.Threading.Tasks;
 using Lab4ParkhomenkoCSharp2019.Tools.Managers;
 using System.ComponentModel.DataAnnotations;
+using System.Windows;
 using Lab4ParkhomenkoCSharp2019.Tools;
 
 namespace Lab4ParkhomenkoCSharp2019.ViewModels.Date
 {
+    [Serializable]
     class Person : BaseViewModel
     {
         private string _name;
         private string _lastName;
-        private DateTime? _birthDate;
+        private readonly DateTime? _birthDate;
         private string _email;
+        private readonly string _westZodiac;
+        private readonly string _chineseZodiac;
+        private readonly string _birthday;
+        private readonly string _adult;
 
         public Person(string name, string lastName, DateTime? birthDate, string email)
         {
@@ -24,6 +30,10 @@ namespace Lab4ParkhomenkoCSharp2019.ViewModels.Date
             if(!new EmailAddressAttribute().IsValid(email))
                 throw new EmailException("Incorrect email: ",email);
             _email = email;
+            _westZodiac = SunSign();
+            _chineseZodiac = ChineseSign();
+            _birthday = (IsBirthday() ? "Yes" : "No");
+            _adult = (IsAdult() ? "Yes" : "No");
         }
 
         public Person(string name, string lastName, string email) : this(name, lastName, DateTime.Now, email)
@@ -36,11 +46,28 @@ namespace Lab4ParkhomenkoCSharp2019.ViewModels.Date
         public string Name
         {
             get { return _name; }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    MessageBox.Show("Name can't be empty");
+                }else
+                _name = value;
+
+            }
         }
 
         public string LastName
         {
             get { return _lastName; }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    MessageBox.Show("LastName can't be empty");
+                }else
+                _name = value;
+            }
         }
 
         public DateTime? BirthDate
@@ -51,7 +78,32 @@ namespace Lab4ParkhomenkoCSharp2019.ViewModels.Date
         public string Email
         {
             get { return _email; }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    MessageBox.Show("Email can't be empty");
+                }else if (!new EmailAddressAttribute().IsValid(value))
+                {
+                    MessageBox.Show("Invalid email");
+                }else
+                _email = value;
+            }
         }
+
+        public string WestZodiac
+        {
+            get { return _westZodiac; }
+        }
+
+        public string ChineseZodiac
+        {
+            get { return _chineseZodiac; }
+        }
+
+        public string Birthday => _birthday;
+
+        public string Adult => _adult;
 
         private enum WesternZodiacSign
         {
@@ -85,7 +137,7 @@ namespace Lab4ParkhomenkoCSharp2019.ViewModels.Date
             Sheep,
         }
 
-        public bool IsAdult()
+        private bool IsAdult()
         {
             int age = GetAge();
             if (age > 135)
@@ -95,7 +147,7 @@ namespace Lab4ParkhomenkoCSharp2019.ViewModels.Date
             return age > 17;
         }
 
-        public string SunSign()
+        private string SunSign()
         {
             DateTime birthDate = Convert.ToDateTime(_birthDate);
             switch (birthDate.Month)
@@ -153,13 +205,13 @@ namespace Lab4ParkhomenkoCSharp2019.ViewModels.Date
             }
         }
 
-        public string ChineseSign()
+        private string ChineseSign()
         {
             DateTime birthDate = Convert.ToDateTime(_birthDate);
             return ((ChineseZodiacSign)(birthDate.Year % 12)).ToString();
         }
 
-        public bool IsBirthday()
+        private bool IsBirthday()
         {
             DateTime currentDate = DateTime.Now;
             DateTime birthDate = Convert.ToDateTime(_birthDate);
@@ -176,11 +228,12 @@ namespace Lab4ParkhomenkoCSharp2019.ViewModels.Date
             DateTime birthDate = Convert.ToDateTime(_birthDate);
             DateTime currentDate = DateTime.Now;
             if ((birthDate.Year == currentDate.Year && birthDate.Month < currentDate.Month) ||
-                (birthDate.Year == currentDate.Year && birthDate.Month == currentDate.Month && birthDate.Day < currentDate.Day))
+                (birthDate.Year == currentDate.Year && birthDate.Month == currentDate.Month && birthDate.Day <= currentDate.Day))
                 return 1;
             if ((birthDate.Year + 1 == currentDate.Year && birthDate.Month > currentDate.Month) ||
                 (birthDate.Year + 1 == currentDate.Year && birthDate.Month == currentDate.Month && birthDate.Day > currentDate.Day))
                 return 1;
+
             int age = currentDate.Year - birthDate.Year;
 
             if ((currentDate.Month == birthDate.Month && currentDate.Day < birthDate.Day) ||

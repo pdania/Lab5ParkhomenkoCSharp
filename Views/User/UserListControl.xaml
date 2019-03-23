@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="Lab4ParkhomenkoCSharp2019.Views.User.UserListControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="52"></RowDefinition>
+            <RowDefinition Height="52"></RowDefinition>
+            <RowDefinition Height="52"></RowDefinition>
+            <RowDefinition Height="52"></RowDefinition>
+            <RowDefinition Height="52"></RowDefinition>
+            <RowDefinition Height="52"></RowDefinition>
+            <RowDefinition Height="52"></RowDefinition>
+            <RowDefinition Height="52"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <DataGrid Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="8" ItemsSource="{Binding Users, Mode=OneWay}" AutoGenerateColumns="False" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="First name" Binding="{Binding Name, Mode=TwoWay}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Last name" Binding="{Binding LastName, Mode=TwoWay}"></DataGridTextColumn>
+                <DataGridTextColumn Header="E-mail" Binding="{Binding Email, Mode=TwoWay}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Birth date" Binding="{Binding BirthDate, Mode=OneWay}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Sun sign" Binding="{Binding WestZodiac, Mode=OneWay}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Chinese sign" Binding="{Binding ChineseZodiac, Mode=OneWay}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Adult" Binding="{Binding Adult, Mode=OneWay}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Birthday" Binding="{Binding Birthday, Mode=OneWay}"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Grid.Row="9" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="40" Content="Save changes" Command="{Binding SaveChange}"/>
+        <Button Grid.Row="9" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="40" Content="Delete user" Command="{Binding GetDate}"/>
+        <Button Grid.Row="9" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="40" Content="Add user" Command="{Binding AddUser}"/>
+        <Label Grid.Row="0" Grid.Column="4" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Name"/>
+        <TextBox Grid.Row="1" Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="30" Margin="5" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Grid.Row="2" Grid.Column="4" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Last name"/>
+        <TextBox Grid.Row="3" Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="30" Margin="5" Text="{Binding LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Grid.Row="4" Grid.Column="4" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Choose date"/>
+        <DatePicker Grid.Row="5" Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="30" Margin="5" SelectedDate="{Binding Date, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Grid.Row="6" Grid.Column="4" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Email"/>
+        <TextBox Grid.Row="7" Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="30" Margin="5" Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+    </Grid>
+</UserControl>
