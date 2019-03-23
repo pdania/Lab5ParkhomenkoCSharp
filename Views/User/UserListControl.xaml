@@ -35,16 +35,16 @@
                 <DataGridTextColumn Header="Birthday" Binding="{Binding Birthday, Mode=OneWay}"></DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Grid.Row="9" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="40" Content="Save changes" Command="{Binding SaveChange}"/>
-        <Button Grid.Row="9" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="40" Content="Delete user" Command="{Binding GetDate}"/>
-        <Button Grid.Row="9" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="40" Content="Add user" Command="{Binding AddUser}"/>
-        <Label Grid.Row="0" Grid.Column="4" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Name"/>
-        <TextBox Grid.Row="1" Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="30" Margin="5" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <Label Grid.Row="2" Grid.Column="4" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Last name"/>
-        <TextBox Grid.Row="3" Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="30" Margin="5" Text="{Binding LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <Label Grid.Row="4" Grid.Column="4" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Choose date"/>
-        <DatePicker Grid.Row="5" Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="30" Margin="5" SelectedDate="{Binding Date, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <Label Grid.Row="6" Grid.Column="4" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Email"/>
-        <TextBox Grid.Row="7" Grid.Column="4" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="30" Margin="5" Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Button Grid.Row="8" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="40" Content="Save changes" Command="{Binding SaveChange}"/>
+        <Button Grid.Row="8" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="40" Content="Delete user" Command="{Binding GetDate}"/>
+        <Button Grid.Row="8" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="40" Content="Add user" Command="{Binding AddUser}"/>
+        <Label Grid.Row="0" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Name"/>
+        <TextBox Grid.Row="1" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="30" Margin="5" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Last name"/>
+        <TextBox Grid.Row="3" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="30" Margin="5" Text="{Binding LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Grid.Row="4" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Choose date"/>
+        <DatePicker Grid.Row="5" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="30" Margin="5" SelectedDate="{Binding Date, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <Label Grid.Row="6" Grid.Column="3" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Email"/>
+        <TextBox Grid.Row="7" Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="30" Margin="5" Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
     </Grid>
 </UserControl>

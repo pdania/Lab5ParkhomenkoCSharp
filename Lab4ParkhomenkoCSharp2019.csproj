@@ -97,7 +97,6 @@
     <Compile Include="Tools\RelayCommand.cs" />
     <Compile Include="ViewModels\AddUserViewModel.cs" />
     <Compile Include="ViewModels\Date\PersonDiedException.cs" />
-    <Compile Include="ViewModels\Date\DateViewModel.cs" />
     <Compile Include="ViewModels\Date\EmailException.cs" />
     <Compile Include="ViewModels\Date\Person.cs" />
     <Compile Include="ViewModels\Date\PersonTooYoungException.cs" />

@@ -66,7 +66,7 @@ namespace Lab4ParkhomenkoCSharp2019.ViewModels.Date
                 {
                     MessageBox.Show("LastName can't be empty");
                 }else
-                _name = value;
+                _lastName=value;
             }
         }
 
