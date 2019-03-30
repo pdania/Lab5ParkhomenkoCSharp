@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{775DC6BE-71BE-492C-B691-89B1D883FB03}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Lab4ParkhomenkoCSharp2019</RootNamespace>
-    <AssemblyName>Lab4ParkhomenkoCSharp2019</AssemblyName>
+    <RootNamespace>Lab5ParkhomenkoCSharp2019</RootNamespace>
+    <AssemblyName>Lab5ParkhomenkoCSharp2019</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -80,40 +80,25 @@
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ProcessList.cs" />
     <Compile Include="Tools\BaseViewModel.cs" />
-    <Compile Include="Tools\DataStorage\IDataStorage.cs" />
-    <Compile Include="Tools\DataStorage\SerializedDataStorage.cs" />
-    <Compile Include="Tools\FileFolderHelper.cs" />
     <Compile Include="Tools\ILoaderOwner.cs" />
     <Compile Include="Tools\Managers\LoaderMenager.cs" />
-    <Compile Include="Tools\Managers\NavigationMenager.cs" />
-    <Compile Include="Tools\Managers\SerializationManager.cs" />
-    <Compile Include="Tools\Managers\StationManager.cs" />
-    <Compile Include="Tools\Navigation\BaseNavigationModel.cs" />
-    <Compile Include="Tools\Navigation\IContentOwner.cs" />
-    <Compile Include="Tools\Navigation\INavigatable.cs" />
-    <Compile Include="Tools\Navigation\INavigationModel.cs" />
-    <Compile Include="Tools\Navigation\InitializationNavigationModel.cs" />
     <Compile Include="Tools\RelayCommand.cs" />
-    <Compile Include="ViewModels\AddUserViewModel.cs" />
-    <Compile Include="ViewModels\Date\PersonDiedException.cs" />
-    <Compile Include="ViewModels\Date\EmailException.cs" />
-    <Compile Include="ViewModels\Date\Person.cs" />
-    <Compile Include="ViewModels\Date\PersonTooYoungException.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\UserListViewModel.cs" />
+    <Compile Include="ViewModels\ProcessListViewModel.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\User\UserListControl.xaml.cs">
-      <DependentUpon>UserListControl.xaml</DependentUpon>
+    <Compile Include="Views\Process\ProcessListControl.xaml.cs">
+      <DependentUpon>ProcessListControl.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\User\UserListControl.xaml">
+    <Page Include="Views\Process\ProcessListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Lab4ParkhomenkoCSharp2019.Tools.Managers
+namespace Lab5ParkhomenkoCSharp2019.Tools.Managers
 {
     internal class LoaderManager
     {

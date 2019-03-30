@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Lab4ParkhomenkoCSharp2019
+namespace Lab5ParkhomenkoCSharp2019
 {
     /// <summary>
     /// Логика взаимодействия для App.xaml
