@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Lab5ParkhomenkoCSharp2019.Tools;
@@ -14,108 +15,107 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
 {
     class ProcessListViewModel : BaseViewModel, INotifyPropertyChanged
     {
-        private ObservableCollection<ProcessList> _users;
-        private DateTime? _birthDate;
-        private string _name;
-        private string _lastName;
-        private string _email;
-        private RelayCommand<object> _getAddUser;
-        private RelayCommand<object> _getSaveChange;
-
-        public ObservableCollection<ProcessList> Users
-        {
-            get => _users;
-            private set
-            {
-                _users = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public DateTime? Date
-        {
-            get { return _birthDate; }
-            set
-            {
-                _birthDate = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Name
-        {
-            get { return _name; }
-            set
-            {
-                _name = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string LastName
-        {
-            get { return _lastName; }
-            set
-            {
-                _lastName = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Email
-        {
-            get { return _email; }
-            set
-            {
-                _email = value;
-                OnPropertyChanged();
-            }
-        }
+        private RelayCommand<object> _kill;
+        private Thread _workingThread;
+        private CancellationToken _token;
+        private CancellationTokenSource _tokenSource;
+        public static event Action _stopThreads;
+        public ObservableCollection<ProcessList> Processes { get; set; }
 
         public ProcessListViewModel()
         {
-            _users = new ObservableCollection<ProcessList>();
-            BackgroundTaskProcess();
+            Processes = new ObservableCollection<ProcessList>();
+            foreach (var p in Process.GetProcesses())
+            {
+                Processes.Add(new ProcessList(p));
+            }
+
+            //StartWorkingThread();
         }
 
-        public RelayCommand<object> AddUser
+        private Process _selectedProcess;
+        public Process SelectedProcess
         {
-            get
+            get => _selectedProcess;
+            set
             {
-                return _getAddUser ?? (_getAddUser = new RelayCommand<object>(
-                           AddUserInplementation, o => CanExecuteCommand()));
+                _selectedProcess = value;
+                OnPropertyChanged();
             }
         }
 
-        public RelayCommand<object> SaveChange
+
+        public RelayCommand<object> KillProcess
         {
             get
             {
-                return _getSaveChange ?? (_getSaveChange = new RelayCommand<object>(
-                           AddUserInplementation));
+                return _kill ?? (_kill = new RelayCommand<object>(
+                           KillProcessImplementation, o => CanExecuteCommand()));
             }
+        }
+
+        private void KillProcessImplementation(object obj)
+        {
+            SelectedProcess.Kill();
         }
 
         private bool CanExecuteCommand()
         {
-            return !string.IsNullOrWhiteSpace(_birthDate.ToString()) &&
-                   !string.IsNullOrWhiteSpace(_name) &&
-                   !string.IsNullOrWhiteSpace(_lastName) &&
-                   !string.IsNullOrWhiteSpace(_email);
+            return true;
         }
-        private async void AddUserInplementation(object obj)
+
+        private void StartWorkingThread()
         {
-            LoaderManager.Instance.ShowLoader();
-            //await Task.Run(() => AddUserTask());
-            LoaderManager.Instance.HideLoader();
+            _tokenSource = new CancellationTokenSource();
+            _token = _tokenSource.Token;
+            _workingThread = new Thread(WorkingThreadProcess);
+            _workingThread.Start();
+            _stopThreads += StopWorkingThread;
         }
 
-        
-
-        private void BackgroundTaskProcess()
+        private void WorkingThreadProcess()
         {
+            int i = 0;
+            while (!_token.IsCancellationRequested)
+            {
+                Processes = new ObservableCollection<ProcessList>();
 
+                foreach (var p in Process.GetProcesses())
+                {
+                    Processes.Add(new ProcessList(p));
+                }
+
+                for (int j = 0; j < 3; j++)
+                {
+                    Thread.Sleep(500);
+                    if (_token.IsCancellationRequested)
+                        break;
+                }
+
+                if (_token.IsCancellationRequested)
+                    break;
+                LoaderManager.Instance.HideLoader();
+                for (int j = 0; j < 10; j++)
+                {
+                    Thread.Sleep(500);
+                    if (_token.IsCancellationRequested)
+                        break;
+                }
+
+                if (_token.IsCancellationRequested)
+                    break;
+                i++;
+            }
         }
+
+        private void StopWorkingThread()
+        {
+            _tokenSource.Cancel();
+            _workingThread.Join(2000);
+            _workingThread.Abort();
+            _workingThread = null;
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
