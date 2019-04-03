@@ -23,7 +23,7 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <DataGrid Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="8" SelectedItem="{Binding SelectedProcess}" ItemsSource="{Binding Processes, Mode=OneWay}" AutoGenerateColumns="False" >
+        <DataGrid Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="8" SelectedItem="{Binding SelectedProcess, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Processes, Mode=OneWay}" AutoGenerateColumns="False" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id, Mode=OneWay}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Process name" Binding="{Binding ProcessName, Mode=OneWay}"></DataGridTextColumn>

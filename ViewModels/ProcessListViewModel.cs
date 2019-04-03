@@ -61,7 +61,7 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
 
         private bool CanExecuteCommand()
         {
-            return true;
+            return SelectedProcess != null;
         }
 
         private void StartWorkingThread()
