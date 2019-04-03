@@ -30,7 +30,7 @@
                 <DataGridTextColumn Header="File name" Binding="{Binding FileName, Mode=OneWay}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Threads" Binding="{Binding Threads, Mode=OneWay}"></DataGridTextColumn>
                 <DataGridTextColumn Header="CPU" Binding="{Binding Cpu, Mode=OneWay}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Chinese sign" Binding="{Binding ChineseZodiac, Mode=OneWay}"></DataGridTextColumn>
+                <DataGridTextColumn Header="% Ram" Binding="{Binding RamPercent, Mode=OneWay}"></DataGridTextColumn>
                 <DataGridTextColumn Header="RAM volume" Binding="{Binding RamVolume, Mode=OneWay}"></DataGridTextColumn>
                 <DataGridTextColumn Header="User name" Binding="{Binding UserName, Mode=OneWay}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Start time" Binding="{Binding StartTime, Mode=OneWay}"></DataGridTextColumn>

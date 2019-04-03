@@ -18,6 +18,7 @@ namespace Lab5ParkhomenkoCSharp2019
         public string UserName { get; private set; }
         public DateTime StartTime { get; private set; }
         public string Responding { get; private set; }
+        public Process Process { get; set; }
 
         public ProcessList(Process process)
         {
@@ -33,6 +34,7 @@ namespace Lab5ParkhomenkoCSharp2019
             catch { }
 
             Threads = process.Threads.Count;
+            RamPercent = new PerformanceCounter("Process", "Working Set", ProcessName, true).NextValue();
             RamVolume = process.PrivateMemorySize64;
             try
             {
