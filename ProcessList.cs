@@ -8,38 +8,49 @@ namespace Lab5ParkhomenkoCSharp2019
 {
     public class ProcessList
     {
-        public int Id { get;private set; }
+        public int Id { get; private set; }
         public string ProcessName { get; private set; }
-        public string FileName { get; private set;}
+        public string FileName { get; private set; }
         public int Threads { get; private set; }
         public double Cpu { get; private set; }
-        public double RamPercent{ get; private set; }
+        public double RamPercent { get; private set; }
         public long RamVolume { get; private set; }
         public string UserName { get; private set; }
         public DateTime StartTime { get; private set; }
         public string Responding { get; private set; }
-        public Process Process { get; set; }
+        public Process Process { get; private set; }
 
         public ProcessList(Process process)
         {
+            Process = process;
             Id = process.Id;
             ProcessName = process.ProcessName;
             var counter = new PerformanceCounter("Process", "% Processor Time", process.ProcessName);
             counter.NextValue();
-            Cpu = (Math.Round(counter.NextValue()/Environment.ProcessorCount, 1));
+            Cpu = (Math.Round(counter.NextValue() / Environment.ProcessorCount, 2));
             try
             {
                 FileName = process.MainModule.FileName;
             }
-            catch { }
+            catch
+            {
+                FileName = "Access denied";
+            }
 
             Threads = process.Threads.Count;
-            RamPercent = new PerformanceCounter("Process", "Working Set", ProcessName, true).NextValue();
-            RamVolume = process.PrivateMemorySize64;
+            RamVolume = process.WorkingSet64;
+            RamPercent =
+                Math.Round(
+                    (double) process.WorkingSet64 /
+                    new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory * 100, 2);
             try
             {
                 StartTime = process.StartTime;
-            }catch{ }
+            }
+            catch
+            {
+                
+            }
 
             IntPtr WTS_CURRENT_SERVER_HANDLE = IntPtr.Zero;
             int WTS_UserName = 5;
@@ -59,6 +70,7 @@ namespace Lab5ParkhomenkoCSharp2019
 
             Responding = process.Responding ? "Yes" : "No";
         }
+
         [DllImport("Wtsapi32.dll")]
         private static extern bool WTSQuerySessionInformationW(
             IntPtr hServer,
@@ -67,5 +79,4 @@ namespace Lab5ParkhomenkoCSharp2019
             out IntPtr ppBuffer,
             out IntPtr pBytesReturned);
     }
-
 }

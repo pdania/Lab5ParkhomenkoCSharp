@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -15,12 +16,39 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
 {
     class ProcessListViewModel : BaseViewModel, INotifyPropertyChanged
     {
-        private RelayCommand<object> _kill;
         private Thread _workingThread;
         private CancellationToken _token;
         private CancellationTokenSource _tokenSource;
         public static event Action _stopThreads;
-        public ObservableCollection<ProcessList> Processes { get; set; }
+
+        #region Fields
+
+        public ObservableCollection<ProcessList> Processes { get; private set; }
+
+        private ObservableCollection<ModuleItem> _modules;
+
+        public ObservableCollection<ModuleItem> Modules
+        {
+            get { return _modules; }
+            private set
+            {
+                _modules = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ObservableCollection<ThreadItem> _threads;
+        public ObservableCollection<ThreadItem> Threads
+        {
+            get { return _threads; }
+            private set
+            {
+                _threads = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
 
         public ProcessListViewModel()
         {
@@ -34,9 +62,10 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
         }
 
         private ProcessList _selectedProcess;
+
         public ProcessList SelectedProcess
         {
-            get => _selectedProcess;
+            get { return _selectedProcess; }
             set
             {
                 _selectedProcess = value;
@@ -44,6 +73,11 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
             }
         }
 
+        #region Commands
+
+        private RelayCommand<object> _kill;
+        private RelayCommand<object> _watchModulesThreads;
+        private RelayCommand<object> _openFolder;
 
         public RelayCommand<object> KillProcess
         {
@@ -54,9 +88,85 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
             }
         }
 
+        public RelayCommand<object> WatchModulesThreads
+        {
+            get
+            {
+                return _watchModulesThreads ?? (_watchModulesThreads = new RelayCommand<object>(
+                           WatchModulesThreadsImplementation, o => CanExecuteCommand()));
+            }
+        }
+
+
+        public RelayCommand<object> OpenFolder
+        {
+            get
+            {
+                return _openFolder ?? (_openFolder = new RelayCommand<object>(
+                           OpenFolderImplementation, o => CanExecuteCommand()));
+            }
+        }
+
+        private void OpenFolderImplementation(object obj)
+        {
+            if (SelectedProcess.FileName == "Access denied")
+            {
+                MessageBox.Show("Can't open folder of this process");
+                return;
+            }
+            try
+            {
+                Process.Start(Path.GetDirectoryName(SelectedProcess.FileName) ?? throw new InvalidOperationException());
+            }
+            catch
+            {
+
+            }
+        }
+
+        #endregion
+
+        private void WatchModulesThreadsImplementation(object obj)
+        {
+            Modules = new ObservableCollection<ModuleItem>();
+            Threads = new ObservableCollection<ThreadItem>();
+            ProcessModuleCollection modules;
+            try
+            {
+                modules = SelectedProcess.Process.Modules; 
+            }
+            catch
+            {
+                MessageBox.Show("Access to this process denied");
+                return;
+            }
+
+            foreach (ProcessModule module in modules)
+            {
+                Modules.Add(new ModuleItem(module));
+            }
+
+            ProcessThreadCollection threads;
+            try
+            {
+                threads = SelectedProcess.Process.Threads;
+            }
+            catch
+            {
+                MessageBox.Show("Access to this process denied");
+                return;
+            }
+
+            foreach (ProcessThread thread in threads)
+            {
+                Threads.Add(new ThreadItem(thread));
+            }
+        }
+
         private void KillProcessImplementation(object obj)
         {
-            SelectedProcess.Kill();
+            SelectedProcess.Process.Kill();
+            Processes.Remove(SelectedProcess);
         }
 
         private bool CanExecuteCommand()
