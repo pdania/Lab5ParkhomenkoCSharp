@@ -33,8 +33,8 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
             //StartWorkingThread();
         }
 
-        private Process _selectedProcess;
-        public Process SelectedProcess
+        private ProcessList _selectedProcess;
+        public ProcessList SelectedProcess
         {
             get => _selectedProcess;
             set
