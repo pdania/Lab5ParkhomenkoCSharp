@@ -212,7 +212,7 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
             try
             {
                 SelectedProcess.Process.Kill();
-                Processes.Remove(SelectedProcess);
+                MessageBox.Show($"{SelectedProcess.ProcessName} was killed");
             }
             catch
             {
