@@ -3,10 +3,11 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace Lab5ParkhomenkoCSharp2019
 {
-    public class ProcessList
+    public class ProcessItem
     {
         public int Id { get; private set; }
         public string ProcessName { get; private set; }
@@ -14,20 +15,24 @@ namespace Lab5ParkhomenkoCSharp2019
         public int Threads { get; private set; }
         public double Cpu { get; private set; }
         public double RamPercent { get; private set; }
-        public long RamVolume { get; private set; }
+        public double RamVolume { get; private set; }
         public string UserName { get; private set; }
-        public DateTime StartTime { get; private set; }
+        public string StartTime { get; private set; }
         public string Responding { get; private set; }
         public Process Process { get; private set; }
 
-        public ProcessList(Process process)
+        private PerformanceCounter CpuCounter { get; }
+        private PerformanceCounter RamCounter { get; }
+
+        public ProcessItem(Process process)
         {
             Process = process;
             Id = process.Id;
             ProcessName = process.ProcessName;
-            var counter = new PerformanceCounter("Process", "% Processor Time", process.ProcessName);
-            counter.NextValue();
-            Cpu = (Math.Round(counter.NextValue() / Environment.ProcessorCount, 2));
+            CpuCounter = new PerformanceCounter("Process", "% Processor Time", process.ProcessName, true);
+            RamCounter = new PerformanceCounter("Process", "Working Set", process.ProcessName, true);
+
+            RefreshMetadata();
             try
             {
                 FileName = process.MainModule.FileName;
@@ -37,19 +42,13 @@ namespace Lab5ParkhomenkoCSharp2019
                 FileName = "Access denied";
             }
 
-            Threads = process.Threads.Count;
-            RamVolume = process.WorkingSet64;
-            RamPercent =
-                Math.Round(
-                    (double) process.WorkingSet64 /
-                    new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory * 100, 2);
             try
             {
-                StartTime = process.StartTime;
+                StartTime = process.StartTime.ToString();
             }
             catch
             {
-                
+                StartTime = "Access denied";
             }
 
             IntPtr WTS_CURRENT_SERVER_HANDLE = IntPtr.Zero;
@@ -65,10 +64,42 @@ namespace Lab5ParkhomenkoCSharp2019
                     out AnswerCount))
                 {
                     UserName = Marshal.PtrToStringUni(AnswerBytes);
+                    if (UserName == "")
+                    {
+                        UserName = "System";
+                    }
                 }
             }
 
             Responding = process.Responding ? "Yes" : "No";
+        }
+
+        public void RefreshMetadata()
+        {
+            try
+            {
+                Cpu = (Math.Round(CpuCounter.NextValue() / Environment.ProcessorCount, 5));
+            }
+            catch (InvalidOperationException)
+            {
+
+            }
+
+            Threads = Process.Threads.Count;
+            try
+            {
+                RamVolume = Math.Round(RamCounter.NextValue(), 5);
+            }
+            catch (InvalidOperationException) { }
+
+            try
+            {
+                RamPercent =
+                    Math.Round(
+                        (double) RamCounter.NextValue() /
+                        new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory * 100, 5);
+            }
+            catch (InvalidOperationException) { }
         }
 
         [DllImport("Wtsapi32.dll")]

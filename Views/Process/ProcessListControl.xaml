@@ -25,9 +25,9 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="20" />
         </Grid.ColumnDefinitions>
-        <DataGrid Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="8"
+        <DataGrid Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="8" CanUserSortColumns="False"
                   SelectedItem="{Binding SelectedProcess, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                  ItemsSource="{Binding Processes, Mode=OneWay}" AutoGenerateColumns="False">
+                  ItemsSource="{Binding Processes, Mode=OneWay}" AutoGenerateColumns="False" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ID" Binding="{Binding Id, Mode=OneWay}" />
                 <DataGridTextColumn Header="Process name" Binding="{Binding ProcessName, Mode=OneWay}" />
@@ -48,8 +48,19 @@
         <Button Grid.Row="8" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                 Content="Open folder" Background="LawnGreen" Command="{Binding OpenFolder}" FontSize="20"/>
 
-        <Button Grid.Row="8" Grid.Column="3" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                Content="Add user" Command="{Binding AddUser}" />
+        <ComboBox SelectedIndex="{Binding Sort}" Grid.Row="8" Grid.Column="3" Grid.ColumnSpan="3" VerticalContentAlignment="Center" FontSize="20" IsDropDownOpen="False">
+            <ComboBoxItem IsSelected="True" IsEnabled="False">Sort Processes:</ComboBoxItem>
+            <ComboBoxItem>ID</ComboBoxItem>
+            <ComboBoxItem>Process name</ComboBoxItem>
+            <ComboBoxItem>File name</ComboBoxItem>
+            <ComboBoxItem>Threads</ComboBoxItem>
+            <ComboBoxItem>CPU</ComboBoxItem>
+            <ComboBoxItem>% Ram</ComboBoxItem>
+            <ComboBoxItem>RAM volume</ComboBoxItem>
+            <ComboBoxItem>User name</ComboBoxItem>
+            <ComboBoxItem>Start time</ComboBoxItem>
+            <ComboBoxItem>Responding?</ComboBoxItem>
+        </ComboBox>
         <Label Grid.Row="0" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Modules"
                FontSize="25" />
         <DataGrid Grid.Row="1" Grid.Column="4" Grid.RowSpan="3"

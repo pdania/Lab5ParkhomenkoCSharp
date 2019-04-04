@@ -83,7 +83,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ModuleItem.cs" />
-    <Compile Include="ProcessList.cs" />
+    <Compile Include="ProcessItem.cs" />
     <Compile Include="ThreadItem.cs" />
     <Compile Include="Tools\BaseViewModel.cs" />
     <Compile Include="Tools\ILoaderOwner.cs" />

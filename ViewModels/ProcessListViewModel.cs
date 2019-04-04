@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -9,6 +10,8 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
 using Lab5ParkhomenkoCSharp2019.Tools;
 using Lab5ParkhomenkoCSharp2019.Tools.Managers;
 
@@ -17,13 +20,20 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
     class ProcessListViewModel : BaseViewModel, INotifyPropertyChanged
     {
         private Thread _workingThread;
-        private CancellationToken _token;
-        private CancellationTokenSource _tokenSource;
-        public static event Action _stopThreads;
 
         #region Fields
 
-        public ObservableCollection<ProcessList> Processes { get; private set; }
+        private ObservableCollection<ProcessItem> _processes;
+
+        public ObservableCollection<ProcessItem> Processes
+        {
+            get { return _processes; }
+            private set
+            {
+                _processes = value;
+                OnPropertyChanged();
+            }
+        }
 
         private ObservableCollection<ModuleItem> _modules;
 
@@ -38,6 +48,7 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
         }
 
         private ObservableCollection<ThreadItem> _threads;
+
         public ObservableCollection<ThreadItem> Threads
         {
             get { return _threads; }
@@ -52,24 +63,41 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
 
         public ProcessListViewModel()
         {
-            Processes = new ObservableCollection<ProcessList>();
+            Processes = new ObservableCollection<ProcessItem>();
             foreach (var p in Process.GetProcesses())
             {
-                Processes.Add(new ProcessList(p));
+                Processes.Add(new ProcessItem(p));
             }
 
-            //StartWorkingThread();
+            Thread refreshMetadataThread = new Thread(RefreshMetadata);
+            refreshMetadataThread.Start();
+            Thread refreshProcessesThread = new Thread(RefreshProcesses);
+            refreshProcessesThread.Start();
         }
 
-        private ProcessList _selectedProcess;
+        private ProcessItem _selectedProcess;
 
-        public ProcessList SelectedProcess
+        public ProcessItem SelectedProcess
         {
             get { return _selectedProcess; }
             set
             {
                 _selectedProcess = value;
                 OnPropertyChanged();
+            }
+        }
+
+        private int _sort;
+        public int Sort
+        {
+            get
+            {
+                return _sort;
+            }
+            set
+            {
+                _sort = value;
+                SortProcesses(_sort, Processes);
             }
         }
 
@@ -107,43 +135,52 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
             }
         }
 
+        #endregion
+
         private void OpenFolderImplementation(object obj)
         {
+            if (SelectedProcess == null)
+            {
+                MessageBox.Show("Select process first");
+                return;
+            }
+
             if (SelectedProcess.FileName == "Access denied")
             {
                 MessageBox.Show("Can't open folder of this process");
                 return;
             }
+
             try
             {
                 Process.Start(Path.GetDirectoryName(SelectedProcess.FileName) ?? throw new InvalidOperationException());
             }
             catch
             {
-
             }
         }
 
-        #endregion
-
         private void WatchModulesThreadsImplementation(object obj)
         {
+            if (SelectedProcess == null)
+            {
+                MessageBox.Show("Select process first");
+                return;
+            }
+
             Modules = new ObservableCollection<ModuleItem>();
             Threads = new ObservableCollection<ThreadItem>();
             ProcessModuleCollection modules;
             try
             {
-                modules = SelectedProcess.Process.Modules; 
+                modules = SelectedProcess.Process.Modules;
+                foreach (ProcessModule module in modules)
+                {
+                    Modules.Add(new ModuleItem(module));
+                }
             }
             catch
             {
-                MessageBox.Show("Access to this process denied");
-                return;
-            }
-
-            foreach (ProcessModule module in modules)
-            {
-                Modules.Add(new ModuleItem(module));
             }
 
             ProcessThreadCollection threads;
@@ -165,67 +202,138 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
 
         private void KillProcessImplementation(object obj)
         {
-            SelectedProcess.Process.Kill();
-            Processes.Remove(SelectedProcess);
+            if (SelectedProcess == null)
+            {
+                MessageBox.Show("Select process first");
+                return;
+            }
+
+            if (SelectedProcess.FileName == "Access denied")
+            {
+                MessageBox.Show("Can't kill system process");
+                return;
+            }
+
+            try
+            {
+                SelectedProcess.Process.Kill();
+                Processes.Remove(SelectedProcess);
+            }
+            catch
+            {
+
+            }
+        }
+
+        private async void SortProcesses(int sortBy, ObservableCollection<ProcessItem> collection)
+        {
+            ObservableCollection<ProcessItem> processesTemp = null;
+            switch (sortBy)
+            {
+                case 0:
+                    Processes = collection;
+                    return;
+                case 1:
+                    await Task.Run(() =>
+                        processesTemp =
+                            new ObservableCollection<ProcessItem>(collection.OrderBy(i => i.Id)));
+                    break;
+                case 2:
+                    await Task.Run(() =>
+                        processesTemp =
+                            new ObservableCollection<ProcessItem>(collection.OrderBy(i => i.ProcessName)));
+                    break;
+                case 3:
+                    await Task.Run(() =>
+                        processesTemp =
+                            new ObservableCollection<ProcessItem>(collection.OrderBy(i => i.FileName)));
+                    break;
+                case 4:
+                    await Task.Run(() =>
+                        processesTemp =
+                            new ObservableCollection<ProcessItem>(collection.OrderBy(i => i.Threads)));
+                    break;
+                case 5:
+                    await Task.Run(() =>
+                        processesTemp =
+                            new ObservableCollection<ProcessItem>(collection.OrderBy(i => i.Cpu)));
+                    break;
+                case 6:
+                    await Task.Run(() =>
+                        processesTemp =
+                            new ObservableCollection<ProcessItem>(collection.OrderBy(i => i.RamPercent)));
+                    break;
+                case 7:
+                    await Task.Run(() =>
+                        processesTemp =
+                            new ObservableCollection<ProcessItem>(collection.OrderBy(i => i.RamVolume)));
+                    break;
+                case 8:
+                    await Task.Run(() =>
+                        processesTemp =
+                            new ObservableCollection<ProcessItem>(collection.OrderBy(i => i.UserName)));
+                    break;
+                case 9:
+                    await Task.Run(() =>
+                        processesTemp =
+                            new ObservableCollection<ProcessItem>(collection.OrderBy(i => i.StartTime)));
+                    break;
+                case 10:
+                    await Task.Run(() =>
+                        processesTemp =
+                            new ObservableCollection<ProcessItem>(collection.OrderBy(i => i.Responding)));
+                    break;
+            }
+            Processes = processesTemp;
         }
 
         private bool CanExecuteCommand()
         {
-            return SelectedProcess != null;
+            return true;
         }
 
-        private void StartWorkingThread()
+        private void RefreshMetadata()
         {
-            _tokenSource = new CancellationTokenSource();
-            _token = _tokenSource.Token;
-            _workingThread = new Thread(WorkingThreadProcess);
-            _workingThread.Start();
-            _stopThreads += StopWorkingThread;
-        }
-
-        private void WorkingThreadProcess()
-        {
-            int i = 0;
-            while (!_token.IsCancellationRequested)
+            while (true)
             {
-                Processes = new ObservableCollection<ProcessList>();
-
-                foreach (var p in Process.GetProcesses())
+                foreach (ProcessItem process in Processes)
                 {
-                    Processes.Add(new ProcessList(p));
+                    process.RefreshMetadata();
                 }
 
-                for (int j = 0; j < 3; j++)
-                {
-                    Thread.Sleep(500);
-                    if (_token.IsCancellationRequested)
-                        break;
-                }
 
-                if (_token.IsCancellationRequested)
-                    break;
-                LoaderManager.Instance.HideLoader();
-                for (int j = 0; j < 10; j++)
-                {
-                    Thread.Sleep(500);
-                    if (_token.IsCancellationRequested)
-                        break;
-                }
-
-                if (_token.IsCancellationRequested)
-                    break;
-                i++;
+                Processes = new ObservableCollection<ProcessItem>(Processes);
+                Thread.Sleep(1000);
             }
         }
 
-        private void StopWorkingThread()
+        private void RefreshProcesses()
         {
-            _tokenSource.Cancel();
-            _workingThread.Join(2000);
-            _workingThread.Abort();
-            _workingThread = null;
-        }
+            while (true)
+            {
+                List<ProcessItem> oldProcesses = Processes.ToList();
+                Process[] newProcesses = Process.GetProcesses();
+                List<ProcessItem> newProcessesList =
+                    (from pr in newProcesses select new ProcessItem(pr)).ToList();
 
+                for (int i = 0; i < oldProcesses.Count; i++)
+                {
+                    if (!newProcessesList.Contains(oldProcesses[i]))
+                    {
+                        oldProcesses.RemoveAt(i);
+                    }
+                }
+
+                foreach (ProcessItem item in newProcessesList)
+                    if (!oldProcesses.Contains(item))
+                    {
+                        oldProcesses.Add(item);
+                    }
+
+                SortProcesses(Sort, new ObservableCollection<ProcessItem>(oldProcesses));
+                Thread.Sleep(1000);
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
