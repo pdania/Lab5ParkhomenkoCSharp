@@ -4,8 +4,8 @@ namespace Lab5ParkhomenkoCSharp2019
 {
     public class ModuleItem
     {
-        public string ModuleName { get; private set; }
-        public string FilePath { get; private set; }
+        public string ModuleName { get;}
+        public string FilePath { get;}
 
         public ModuleItem(ProcessModule module)
         {

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
-using Lab5ParkhomenkoCSharp2019.Tools.Managers;
 using Lab5ParkhomenkoCSharp2019.ViewModels;
 
 namespace Lab5ParkhomenkoCSharp2019
@@ -14,9 +12,9 @@ namespace Lab5ParkhomenkoCSharp2019
     {
         public static event Action StopThreads;
         public MainWindow()
-        { 
-            DataContext = new MainWindowViewModel();
+        {
             InitializeComponent();
+            DataContext = new MainWindowViewModel();
         }
 
         protected override void OnClosing(CancelEventArgs e)

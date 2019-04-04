@@ -33,8 +33,8 @@
                 <DataGridTextColumn Header="Process name" Binding="{Binding ProcessName, Mode=OneWay}" />
                 <DataGridTextColumn Header="File name" Binding="{Binding FileName, Mode=OneWay}" />
                 <DataGridTextColumn Header="Threads" Binding="{Binding Threads, Mode=OneWay}" />
-                <DataGridTextColumn Header="CPU" Binding="{Binding Cpu, Mode=OneWay}" />
-                <DataGridTextColumn Header="% Ram" Binding="{Binding RamPercent, Mode=OneWay}" />
+                <DataGridTextColumn Header="CPU %" Binding="{Binding Cpu, Mode=OneWay}" />
+                <DataGridTextColumn Header="Ram %" Binding="{Binding RamPercent, Mode=OneWay}" />
                 <DataGridTextColumn Header="RAM volume" Binding="{Binding RamVolume, Mode=OneWay}" />
                 <DataGridTextColumn Header="User name" Binding="{Binding UserName, Mode=OneWay}" />
                 <DataGridTextColumn Header="Start time" Binding="{Binding StartTime, Mode=OneWay}" />
@@ -54,8 +54,8 @@
             <ComboBoxItem>Process name</ComboBoxItem>
             <ComboBoxItem>File name</ComboBoxItem>
             <ComboBoxItem>Threads</ComboBoxItem>
-            <ComboBoxItem>CPU</ComboBoxItem>
-            <ComboBoxItem>% Ram</ComboBoxItem>
+            <ComboBoxItem>CPU %</ComboBoxItem>
+            <ComboBoxItem>Ram %</ComboBoxItem>
             <ComboBoxItem>RAM volume</ComboBoxItem>
             <ComboBoxItem>User name</ComboBoxItem>
             <ComboBoxItem>Start time</ComboBoxItem>

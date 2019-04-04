@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Lab5ParkhomenkoCSharp2019.Properties;
 
 namespace Lab5ParkhomenkoCSharp2019.Tools
 {

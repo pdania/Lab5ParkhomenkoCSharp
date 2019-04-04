@@ -5,9 +5,9 @@ namespace Lab5ParkhomenkoCSharp2019
 {
     public class ThreadItem
     {
-        public int Id { get;private set; }
-        public ThreadState State { get;private set; }
-        public DateTime StartTime { get; private set; }
+        public int Id { get;}
+        public ThreadState State { get;}
+        public DateTime StartTime { get;}
 
         public ThreadItem(ProcessThread thread)
         {

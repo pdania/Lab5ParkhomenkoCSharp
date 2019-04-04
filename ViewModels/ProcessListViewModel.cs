@@ -5,24 +5,19 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
 using Lab5ParkhomenkoCSharp2019.Tools;
-using Lab5ParkhomenkoCSharp2019.Tools.Managers;
 
 namespace Lab5ParkhomenkoCSharp2019.ViewModels
 {
     class ProcessListViewModel : BaseViewModel, INotifyPropertyChanged
     {
-        private Thread _workingThread;
 
         #region Fields
-
+        
         private ObservableCollection<ProcessItem> _processes;
 
         public ObservableCollection<ProcessItem> Processes
@@ -68,7 +63,7 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
             {
                 Processes.Add(new ProcessItem(p));
             }
-
+           
             Thread refreshMetadataThread = new Thread(RefreshMetadata);
             refreshMetadataThread.Start();
             Thread refreshProcessesThread = new Thread(RefreshProcesses);
@@ -301,7 +296,6 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
                     process.RefreshMetadata();
                 }
 
-
                 Processes = new ObservableCollection<ProcessItem>(Processes);
                 Thread.Sleep(1000);
             }
@@ -331,7 +325,7 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
                     }
 
                 SortProcesses(Sort, new ObservableCollection<ProcessItem>(oldProcesses));
-                Thread.Sleep(1000);
+                Thread.Sleep(3000);
             }
         }
 

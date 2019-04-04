@@ -3,14 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Lab5ParkhomenkoCSharp2019"
-        xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:process="clr-namespace:Lab5ParkhomenkoCSharp2019.Views.Process"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1000"
+        Title="Task manager" Height="600" Width="1000"
         ResizeMode="NoResize">
     <Grid>
         <process:ProcessListControl />
-        <fa:ImageAwesome Icon="Refresh" Width="50" Height="50" Spin="True" Visibility="{Binding LoaderVisibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"></fa:ImageAwesome>
     </Grid>
 </Window>
