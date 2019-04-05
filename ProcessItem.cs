@@ -6,21 +6,21 @@ namespace Lab5ParkhomenkoCSharp2019
 {
     public class ProcessItem
     {
-        public int Id { get;}
-        public string ProcessName { get;}
-        public string FileName { get;}
+        public int Id { get; }
+        public string ProcessName { get; }
+        public string FileName { get; }
         public int Threads { get; private set; }
         public double Cpu { get; private set; }
         public double RamPercent { get; private set; }
         public double RamVolume { get; private set; }
-        public string UserName { get;}
-        public string StartTime { get;}
-        public string Responding { get;}
-        public Process Process { get;}
+        public string UserName { get; }
+        public string StartTime { get; }
+        public string Responding { get; }
+        public Process Process { get; }
 
         private PerformanceCounter CpuCounter { get; }
         private PerformanceCounter RamCounter { get; }
-
+        
         public ProcessItem(Process process)
         {
             Process = process;
@@ -28,6 +28,21 @@ namespace Lab5ParkhomenkoCSharp2019
             ProcessName = process.ProcessName;
             CpuCounter = new PerformanceCounter("Process", "% Processor Time", process.ProcessName, true);
             RamCounter = new PerformanceCounter("Process", "Working Set", process.ProcessName, true);
+            try
+            {
+                CpuCounter.NextValue();
+            }
+            catch (InvalidOperationException)
+            {
+            }
+
+            try
+            {
+                RamCounter.NextValue();
+            }
+            catch (InvalidOperationException)
+            {
+            }
 
             RefreshMetadata();
             try
@@ -67,10 +82,17 @@ namespace Lab5ParkhomenkoCSharp2019
                     }
                 }
             }
+            else
+            {
+                UserName = "System";
+            }
 
             Responding = process.Responding ? "Yes" : "No";
         }
 
+        /*
+         * Function that refresh cpu, ram and ram %
+         */
         public void RefreshMetadata()
         {
             try
@@ -79,15 +101,16 @@ namespace Lab5ParkhomenkoCSharp2019
             }
             catch (InvalidOperationException)
             {
-
             }
 
             Threads = Process.Threads.Count;
             try
             {
-                RamVolume = Math.Round(RamCounter.NextValue()/1024/1024, 5);
+                RamVolume = Math.Round(RamCounter.NextValue() / 1024 / 1024, 5);
             }
-            catch (InvalidOperationException) { }
+            catch (InvalidOperationException)
+            {
+            }
 
             try
             {
@@ -96,7 +119,9 @@ namespace Lab5ParkhomenkoCSharp2019
                         (double) RamCounter.NextValue() /
                         new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory * 100, 5);
             }
-            catch (InvalidOperationException) { }
+            catch (InvalidOperationException)
+            {
+            }
         }
 
         [DllImport("Wtsapi32.dll")]

@@ -17,7 +17,9 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
     {
 
         #region Fields
-        
+        /*
+         * Collection of all PC processes
+         */
         private ObservableCollection<ProcessItem> _processes;
 
         public ObservableCollection<ProcessItem> Processes
@@ -29,7 +31,9 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
                 OnPropertyChanged();
             }
         }
-
+        /*
+         * Collection of modules
+         */
         private ObservableCollection<ModuleItem> _modules;
 
         public ObservableCollection<ModuleItem> Modules
@@ -41,7 +45,9 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
                 OnPropertyChanged();
             }
         }
-
+        /*
+         * Collection of threads
+         */
         private ObservableCollection<ThreadItem> _threads;
 
         public ObservableCollection<ThreadItem> Threads
@@ -53,23 +59,9 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
                 OnPropertyChanged();
             }
         }
-
-        #endregion
-
-        public ProcessListViewModel()
-        {
-            Processes = new ObservableCollection<ProcessItem>();
-            foreach (var p in Process.GetProcesses())
-            {
-                Processes.Add(new ProcessItem(p));
-            }
-           
-            Thread refreshMetadataThread = new Thread(RefreshMetadata);
-            refreshMetadataThread.Start();
-            Thread refreshProcessesThread = new Thread(RefreshProcesses);
-            refreshProcessesThread.Start();
-        }
-
+        /*
+         * Save selected process if after refresh chosen process was removed, it contains null
+         */
         private ProcessItem _selectedProcess;
 
         public ProcessItem SelectedProcess
@@ -96,6 +88,24 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
             }
         }
 
+        #endregion
+        /*
+         * Constructor of ProcessListViewModel
+         */
+        public ProcessListViewModel()
+        {
+            Processes = new ObservableCollection<ProcessItem>();
+            foreach (var p in Process.GetProcesses())
+            {
+                Processes.Add(new ProcessItem(p));
+            }
+           
+            Thread refreshMetadataThread = new Thread(RefreshMetadata);
+            refreshMetadataThread.Start();
+            Thread refreshProcessesThread = new Thread(RefreshProcesses);
+            refreshProcessesThread.Start();
+        }
+
         #region Commands
 
         private RelayCommand<object> _kill;
@@ -107,7 +117,7 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
             get
             {
                 return _kill ?? (_kill = new RelayCommand<object>(
-                           KillProcessImplementation, o => CanExecuteCommand()));
+                           KillProcessImplementation));
             }
         }
 
@@ -116,7 +126,7 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
             get
             {
                 return _watchModulesThreads ?? (_watchModulesThreads = new RelayCommand<object>(
-                           WatchModulesThreadsImplementation, o => CanExecuteCommand()));
+                           WatchModulesThreadsImplementation));
             }
         }
 
@@ -126,12 +136,14 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
             get
             {
                 return _openFolder ?? (_openFolder = new RelayCommand<object>(
-                           OpenFolderImplementation, o => CanExecuteCommand()));
+                           OpenFolderImplementation));
             }
         }
 
         #endregion
-
+        /*
+         * Function that open folder of selected process if filePath is unknown shows message
+         */
         private void OpenFolderImplementation(object obj)
         {
             if (SelectedProcess == null)
@@ -154,7 +166,9 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
             {
             }
         }
-
+        /*
+         * Function that shows modules and thread of selected process
+         */
         private void WatchModulesThreadsImplementation(object obj)
         {
             if (SelectedProcess == null)
@@ -194,7 +208,9 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
                 Threads.Add(new ThreadItem(thread));
             }
         }
-
+        /*
+         * Function that kills selected process and set selected process equal 0
+         */
         private void KillProcessImplementation(object obj)
         {
             if (SelectedProcess == null)
@@ -213,13 +229,16 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
             {
                 SelectedProcess.Process.Kill();
                 MessageBox.Show($"{SelectedProcess.ProcessName} was killed");
+                SelectedProcess = null;
             }
             catch
             {
-
+                MessageBox.Show("Can't kill system process");
             }
         }
-
+        /*
+         * Function that sort Processes by chosen field
+         */
         private async void SortProcesses(int sortBy, ObservableCollection<ProcessItem> collection)
         {
             ObservableCollection<ProcessItem> processesTemp = null;
@@ -281,12 +300,9 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
             }
             Processes = processesTemp;
         }
-
-        private bool CanExecuteCommand()
-        {
-            return true;
-        }
-
+        /*
+         * Thread function that refresh metadata during work
+         */
         private void RefreshMetadata()
         {
             while (true)
@@ -300,15 +316,16 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
                 Thread.Sleep(1000);
             }
         }
-
+        /*
+         * Thread function that refresh all processes during work
+         */
         private void RefreshProcesses()
         {
             while (true)
             {
                 List<ProcessItem> oldProcesses = Processes.ToList();
                 Process[] newProcesses = Process.GetProcesses();
-                List<ProcessItem> newProcessesList =
-                    (from pr in newProcesses select new ProcessItem(pr)).ToList();
+                List<ProcessItem> newProcessesList = newProcesses.Select(p => new ProcessItem(p)).ToList();
 
                 for (int i = 0; i < oldProcesses.Count; i++)
                 {

@@ -16,7 +16,9 @@ namespace Lab5ParkhomenkoCSharp2019
             InitializeComponent();
             DataContext = new MainWindowViewModel();
         }
-
+        /*
+         * Function that stop all threads after shutting down
+         */
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);

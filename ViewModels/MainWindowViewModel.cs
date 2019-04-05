@@ -6,7 +6,6 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
     {
         public MainWindowViewModel()
         {
-
         }
     }
 }
