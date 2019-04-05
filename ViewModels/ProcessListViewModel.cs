@@ -342,7 +342,7 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
                     }
 
                 SortProcesses(Sort, new ObservableCollection<ProcessItem>(oldProcesses));
-                Thread.Sleep(3000);
+                Thread.Sleep(4000);
             }
         }
 
