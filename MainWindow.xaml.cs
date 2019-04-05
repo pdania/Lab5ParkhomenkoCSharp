@@ -14,7 +14,6 @@ namespace Lab5ParkhomenkoCSharp2019
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainWindowViewModel();
         }
         /*
          * Function that stop all threads after shutting down

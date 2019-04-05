@@ -60,7 +60,7 @@ namespace Lab5ParkhomenkoCSharp2019.ViewModels
             }
         }
         /*
-         * Save selected process if after refresh chosen process was removed, it contains null
+         * Save selected process if after refresh chosen process was removed and then added or removed permanently, it contains null
          */
         private ProcessItem _selectedProcess;
 
