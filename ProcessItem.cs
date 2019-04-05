@@ -17,6 +17,7 @@ namespace Lab5ParkhomenkoCSharp2019
         public string StartTime { get; }
         public string Responding { get; }
         public Process Process { get; }
+        private readonly ulong _totalMemory;
 
         private PerformanceCounter CpuCounter { get; }
         private PerformanceCounter RamCounter { get; }
@@ -28,6 +29,7 @@ namespace Lab5ParkhomenkoCSharp2019
             ProcessName = process.ProcessName;
             CpuCounter = new PerformanceCounter("Process", "% Processor Time", process.ProcessName, true);
             RamCounter = new PerformanceCounter("Process", "Working Set", process.ProcessName, true);
+            _totalMemory = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory;
             try
             {
                 CpuCounter.NextValue();
@@ -117,7 +119,7 @@ namespace Lab5ParkhomenkoCSharp2019
                 RamPercent =
                     Math.Round(
                         (double) RamCounter.NextValue() /
-                        new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory * 100, 5);
+                        _totalMemory * 100, 5);
             }
             catch (InvalidOperationException)
             {
